@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <title>Interactive API Plot Generator</title>
+</head>
+<body>
+  <h2>Enter a Query to Generate a Plot</h2>
+  <form method="post">
+    <textarea name="query" rows="4" cols="80" placeholder="e.g. Show me submissions per weekday for module 50002 exercise 2">{{ request.form.query or '' }}</textarea><br><br>
+    <button type="submit">Generate</button>
+  </form>
+
+  {% if error %}
+    <p style="color: red;">Error: {{ error }}</p>
+  {% endif %}
+
+  {% if plot_ready %}
+    <h3>Generated Plot:</h3>
+    <img src="{{ url_for('plot') }}" alt="Generated Plot" width="800">
+  {% endif %}
+</body>
+</html>
+
