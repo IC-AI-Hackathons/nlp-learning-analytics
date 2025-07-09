@@ -1,23 +1,55 @@
 <!doctype html>
 <html>
 <head>
-  <title>Interactive API Plot Generator</title>
+  <title>Learning Analytics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h2>Enter a Query to Generate a Plot</h2>
-  <form method="post">
-    <textarea name="query" rows="4" cols="80" placeholder="e.g. Show me submissions per weekday for module 50002 exercise 2">{{ request.form.query or '' }}</textarea><br><br>
-    <button type="submit">Generate</button>
-  </form>
+<body class="bg-gray-100 min-h-screen font-sans flex flex-col items-center pt-12 px-4">
 
-  {% if error %}
-    <p style="color: red;">Error: {{ error }}</p>
-  {% endif %}
+  <div class="w-full max-w-3xl bg-white shadow-xl rounded-xl p-8 space-y-6">
+    <h2 class="text-2xl font-bold text-center text-indigo-700">Learning Analytics</h2>
 
-  {% if plot_ready %}
-    <h3>Generated Plot:</h3>
-    <img src="{{ url_for('plot') }}" alt="Generated Plot" width="800">
-  {% endif %}
+    <form method="post" onsubmit="showLoader()" class="space-y-4">
+      <textarea name="query"
+                rows="4"
+                class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                placeholder="e.g. Show me submissions per weekday for module 50002 exercise 2"
+                required>{{ request.form.query or '' }}</textarea>
+      <div class="text-center">
+        <button type="submit"
+                class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition">
+          Generate
+        </button>
+      </div>
+    </form>
+
+    <!-- Loader -->
+    <div id="loader" class="hidden flex justify-center">
+      <div class="w-12 h-12 border-4 border-indigo-300 border-t-indigo-700 rounded-full animate-spin"></div>
+    </div>
+
+    <!-- Error Banner -->
+    {% if error %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative shadow">
+      <strong class="font-bold">Error:</strong>
+      <span class="block sm:inline">{{ error }}</span>
+    </div>
+    {% endif %}
+
+    <!-- Plot Output -->
+    {% if plot_ready %}
+    <div class="text-center space-y-4">
+      <h3 class="text-lg font-semibold text-gray-800">Generated Plot:</h3>
+      <img src="{{ url_for('plot') }}" alt="Generated Plot" class="mx-auto rounded-lg shadow-md border" width="800">
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- JavaScript to show loading spinner -->
+  <script>
+    function showLoader() {
+      document.getElementById("loader").classList.remove("hidden");
+    }
+  </script>
 </body>
 </html>
-
