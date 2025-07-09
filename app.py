@@ -117,10 +117,13 @@ def index():
         query = request.form["query"]
 
         try:
+            print("🤖 Forwarding query to AI...")
             code = ask_openai(query)
+            print("📁 Saving output to file...")
             file_path = generate_filename(query)
             generated_path = file_path.name
 
+            print("📊 Generating plot...")
             err = run_code(code, file_path)
             if err:
                 error = f"Script execution failed: {err}"
